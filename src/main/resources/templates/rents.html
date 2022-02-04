@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<header>
+    <div th:replace="fragments/navbar :: navbar">
+    </div>
+</header>
+<div class="container">
+    <form th:action="@{/rents/filter}"  method="GET" th:with="today=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+        <div class="row border my-3">
+            <label class="form-label " >Filter by date range and/or category</label>
+            <div class="form-group col-md-auto">
+                <div class="input-group date">
+                    <input type="date" name="start" th:attr="max=${today}" th:value="${start}" class="form-control" autocomplete="off"/>
+                </div>
+                <label  class="form-label" >Start</label>
+            </div>
+            <div class="form-group col-md-auto">
+                <div class="input-group date">
+                    <input type="date" name="end" th:attr="max=${today}" th:value="${end}" class="form-control" autocomplete="off"/>
+                </div>
+                <label class="form-label" >End</label>
+            </div>
+            <div class="form-group col-md-auto">
+                <select  th:name="returned" class="form-control" >
+                    <option value="all">All</option>
+                    <option th:selected="${'returned'==returned}" value="returned">Returned</option>
+                    <option th:selected="${'noreturned'==returned}" value="noreturned">No returned</option>
+                </select>
+                <label class="form-label" >Returned</label>
+            </div>
+            <div class="form-group col-md-auto">
+                <select name="deviceid" class="form-control">
+                    <option th:value=0>All</option>
+                    <option th:each="device:${devices}" th:value="${device.id}"
+                            th:selected="${device.id==deviceid}"   th:text="${device.name}">Devices</option>
+                </select>
+                <label class="form-label" >Device</label>
+            </div>
+            <div class="form-group col-md-auto">
+                <button type="submit" class="btn btn-warning ms-2">GO</button>
+            </div>
+        </div>
+    </form>
+    <div class="table-responsive-sm">
+        <table class="table table-hover table-sm">
+            <thead>
+            <tr>
+                <th>Rent</th>
+                <th>Client</th>
+                <th>Device</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>Limit Days</th>
+                <th>Days Remaining</th>
+                <th>Returned</th>
+                <th>Late Fee</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:if="${totalPages == 0}">No results</tr>
+            <tr th:classappend="${(rent.isLate() and !rent.isReturned() ? 'table-danger' : '')}" class="border"
+                th:each="rent:${rents}">
+                <td th:text="${rent.id}"></td>
+                <td th:text="${rent.client.name +' '+rent.client.lastName}"></td>
+                <td th:text="${rent.device.name}"></td>
+                <td th:text="${rent.startDate}"></td>
+                <td th:text="${rent.endDate}"></td>
+                <td><span th:text="${rent.getDurationDays()}"></span> days</td>
+                <td th:classappend="${(rent.daysRemaining() &lt; 4 and rent.daysRemaining() &gt; 0 ?  'table-warning':'')}">
+                    <span th:text="${rent.daysRemaining()}"></span> days</td>
+                <span th:switch="${rent.isReturned()}"  th:classappend="${(rent.isLate() ? 'table-danger' : '')}">
+                    <td th:case="${true}" th:classappend="${(rent.isLate() ? 'table-danger' : 'table-success')}"
+                        th:text="${rent.returnedDate}"></td>
+                    <td th:case="${false}" th:text="${rent.isReturned()}"></td>
+                </span>
+                <td th:classappend="${(rent.lateFee() > 0 ? 'btn-outline-danger fw-bold' : '')}" >
+                    <span th:text="${rent.lateFee()}"></span> $
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation" th:if="${totalPages > 0}">
+            <ul class="pagination justify-content-center">
+                <li  class="page-item" th:classappend="${ current==1 ? 'disabled':''}">
+                    <a class="page-link" th:href="@{|?page=${current-1}}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                </li>
+                </li>
+                <li th:each="page:${pages}" class="page-item" th:classappend="${current==page ? 'active':''}">
+                    <a class="page-link" th:href="@{|?page=${page}}"
+                       th:text="${page}"> pages</a></li>
+                <li class="page-item" th:classappend="${ current==#lists.size(pages) ? 'disabled':''}">
+                    <a class="page-link" th:href="@{|?page=${current+1}}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
