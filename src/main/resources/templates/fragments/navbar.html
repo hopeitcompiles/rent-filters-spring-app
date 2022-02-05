@@ -10,7 +10,7 @@
       <div class="navbar-nav">
         <a href="/" class="nav-item nav-link active">Home</a>
         <a href="/devices" class="nav-item nav-link">Devices</a>
-        <a href="#" class="nav-item nav-link">Clients</a>
+        <a href="/clients" class="nav-item nav-link">Clients</a>
         <a href="/rents" class="nav-item nav-link">Rents</a>
         <div class="nav-item dropdown">
           <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Quick Access</a>
@@ -21,15 +21,15 @@
           </div>
         </div>
       </div>
-      <form class="d-flex" th:action="@{/search}" method="POST">
+      <form class="d-flex">
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Search" name="searching" aria-label="Search" required>
           <button type="submit" class="btn btn-secondary"><i class="fa fa-search"></i></button>
         </div>
       </form>
       <div class="navbar-nav">
-        <a  href="/login" class="nav-item nav-link" id="login">Log in</a>
-        <a  href="/signup" class="nav-item nav-link">Register</a>
+        <a  href="#" class="nav-item nav-link" id="login">Log in</a>
+        <a  href="#" class="nav-item nav-link">Register</a>
       </div>
     </div>
   </div>

@@ -17,19 +17,25 @@
         <table class="table table-hover table-sm">
             <thead>
             <tr>
-                <th>Device</th>
+                <th>Client</th>
                 <th>Name</th>
-                <th>Status</th>
+                <th>Last Name</th>
                 <th>Total Rents</th>
+                <th>Total Penalties</th>
+                <th>Total Fine</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:classappend="${(device.isRented() ? 'table-warning' : 'table-success')}" class="border"
-                th:each="device:${devices}">
-                <td th:text="${device.id}"></td>
-                <td th:text="${device.name}"></td>
-                <td th:text="${device.status.name}"></td>
-                <td th:text="${#lists.size(device.rents)}"></td>
+            <tr class="border"
+                th:each="client:${clients}">
+                <td th:text="${client.id}"></td>
+                <td th:text="${client.name}"></td>
+                <td th:text="${client.lastName}"></td>
+                <td th:text="${#lists.size(client.rents)}"></td>
+                <td th:classappend="${(client.getHasBeenFined() ? 'table-danger' : 'table-success')}" th:text="${client.rentsWithFine()}"></td>
+                <td th:classappend="${(client.getHasBeenFined() ? 'table-danger' : 'table-success')}">
+                    <span class="" th:text="${client.getTotalFined()}"></span> <i class="fa fa-usd" aria-hidden="true"></i>
+                </td>
             </tr>
             </tbody>
         </table>

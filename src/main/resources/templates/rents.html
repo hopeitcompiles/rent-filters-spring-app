@@ -36,10 +36,18 @@
                 <label class="form-label" >Returned</label>
             </div>
             <div class="form-group col-md-auto">
+                <select  th:name="penalty" class="form-control" >
+                    <option value=0>All</option>
+                    <option th:selected="${penalty==1}" value=1>Penalty </option>
+                    <option th:selected="${penalty==2}" value=2>No penalty </option>
+                </select>
+                <label class="form-label" >Has fee</label>
+            </div>
+            <div class="form-group col-md-auto">
                 <select name="deviceid" class="form-control">
                     <option th:value=0>All</option>
                     <option th:each="device:${devices}" th:value="${device.id}"
-                            th:selected="${device.id==deviceid}"   th:text="${device.name}">Devices</option>
+                            th:selected="${device.id==deviceid}"  th:text="${device.name}">Devices</option>
                 </select>
                 <label class="form-label" >Device</label>
             </div>
@@ -73,20 +81,20 @@
                 <td th:text="${rent.startDate}"></td>
                 <td th:text="${rent.endDate}"></td>
                 <td><span th:text="${rent.getDurationDays()}"></span> days</td>
-                <td th:classappend="${(rent.daysRemaining() &lt; 4 and rent.daysRemaining() &gt; 0 ?  'table-warning':'')}">
-                    <span th:text="${rent.daysRemaining()}"></span> days</td>
+                <td th:classappend="${(rent.daysRemaining() &lt; 4 and rent.daysRemaining() &gt; 0 ?  'table-warning':'')}"><span th:classappend="${(rent.isLate() ? 'text-danger fw-bold' : '')}">
+                    <span th:text="${rent.daysRemaining()}"></span> days</span></td>
                 <span th:switch="${rent.isReturned()}"  th:classappend="${(rent.isLate() ? 'table-danger' : '')}">
                     <td th:case="${true}" th:classappend="${(rent.isLate() ? 'table-danger' : 'table-success')}"
                         th:text="${rent.returnedDate}"></td>
-                    <td th:case="${false}" th:text="${rent.isReturned()}"></td>
+                    <td th:case="${false}" class="fw-bold">No returned</td>
                 </span>
-                <td th:classappend="${(rent.lateFee() > 0 ? 'btn-outline-danger fw-bold' : '')}" >
+                <td th:classappend="${(rent.isLate() ? 'btn-outline-danger fw-bold' : '')}" >
                     <span th:text="${rent.lateFee()}"></span> $
                 </td>
             </tr>
             </tbody>
         </table>
-        <nav aria-label="Page navigation" th:if="${totalPages > 0}">
+        <nav aria-label="Page navigation" th:if="${totalPages > 1}">
             <ul class="pagination justify-content-center">
                 <li  class="page-item" th:classappend="${ current==1 ? 'disabled':''}">
                     <a class="page-link" th:href="@{|?page=${current-1}}" aria-label="Previous">

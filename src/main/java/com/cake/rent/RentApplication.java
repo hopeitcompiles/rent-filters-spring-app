@@ -72,23 +72,23 @@ public class RentApplication {
 			Random rand = new Random();
 
 			Rent rent=new Rent();
-			for (int i = 0; i < devices.size()+clients.size(); i++) {
-				rent.setId((long) i+1);
+
+			for (int i = 0; i < devices.size() + clients.size()+100; i++) {
+				rent.setId(null);
 				rent.setStartDate(LocalDate.now().minus(Period.ofDays(rand.nextInt(60))));
 				rent.setEndDateByDurationDays(30);
-				if(rand.nextInt(60)<20){
+				if (rand.nextInt(60) < 20) {
 					rent.setReturnedDate(rent.getStartDate().plus(Period.ofDays(rand.nextInt(50))));
 				}
 				rent.setClient(clients.get(rand.nextInt(clients.size())));
 				rent.setDevice(devices.get(rand.nextInt(devices.size())));
 				rentService.save(rent);
 			}
+
 		};
 
 	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(RentApplication.class, args);
 	}
-
 }

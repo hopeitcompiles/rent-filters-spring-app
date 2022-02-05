@@ -19,6 +19,7 @@ public class Rent{
     private Long id;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Setter(AccessLevel.NONE)
     private LocalDate returnedDate;
     @ManyToOne
     @JoinColumn(name = "id_client")
@@ -26,6 +27,16 @@ public class Rent{
     @ManyToOne
     @JoinColumn(name = "id_device")
     private Device device;
+
+    @Transient
+    private Float penalty;
+
+    public void setReturnedDate(LocalDate returnedDate){
+        if(returnedDate.isBefore(startDate)){
+            returnedDate=startDate.plus(1,ChronoUnit.DAYS);
+        }
+        this.returnedDate=returnedDate;
+    }
 
     public void setEndDateByDurationDays(int durationDays){
         if(this.startDate==null){
@@ -48,14 +59,18 @@ public class Rent{
         }
     }
     public double lateFee(){
-        if(isLate()){
-            if(isReturned()){
-                return lateFee*endDate.until(returnedDate, ChronoUnit.DAYS);
+        if(penalty==null){
+            if(isLate()){
+                if(isReturned()){
+                    penalty= lateFee*endDate.until(returnedDate, ChronoUnit.DAYS);
+                }else {
+                    return lateFee*endDate.until(LocalDate.now(),ChronoUnit.DAYS);
+                }
             }else {
-                return lateFee*endDate.until(LocalDate.now(),ChronoUnit.DAYS);
+                return 0;
             }
         }
-        return 0;
+        return penalty;
     }
 
     public Long daysRemaining(){
