@@ -16,4 +16,18 @@ https://cake-rent-filters.herokuapp.com
 
 En caso de no estar disponible, es probable que se haya excedido el límite de consultas de la base de datos ClearDB.
 
+### Filtrado de pocos atributos
+En caso de que solo se requiera aplicar filtro a pocos atributos, siempre y cuando no contengan parámetros null, es posible crear un método que describa la consulta en la interfaz de repositorio, si dicho repositorio extiende de JPARepository es posible también incluir la paginación. Por ejemplo:
+
+<img src="https://user-images.githubusercontent.com/73175815/152672253-b964c2e3-dae4-424a-b98f-4b32b6a13020.png">
+
+Sin la necesidad de incluir código extra, solo indicándolo mediante el nombre del método en la interfaz de repositorio, Spring reconocerá la consula y traerá los resultados.
+
+### Filtrado de multiples atributos
+Cuando se tienen varios parámetros y su combinación puede varias, se puede emplear CriteriaBuilder del EntityManager, CriteriaQuery, Root y una lista de Predicate que incluyan los parámetros de filtro a aplicar. Por ejemplo:
+
+
+<img src="https://user-images.githubusercontent.com/73175815/152672386-f9bb72f2-eda0-4259-8331-be0c805fc309.png">
+
+Este método permite crear distintas combinaciones personalizadas, incluyendo controles OR y AND, para aplicar los filtros deseados.
 
