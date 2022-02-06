@@ -1,5 +1,6 @@
-# filters-spring-thymeleaf-mysql
-Esta aplicación usa Spring Framework, Thymeleaf y una base de datos MySQL para organizar un sistema de alquiler de dispositivos, donde cada uno de estos es rentado estableciendo una fecha de inicio, fin (límite de dovolución) y de retorno. Solo se pueden rentar los dispositivos que no están ya registrados en un alquiler que no ha sido devuelto. Se aplicará una multa de 5 dólares por día en caso de atrasos en la devolución.
+# Filters Spring Thymeleaf MySQL
+Esta aplicación usa Spring Framework, Thymeleaf y una base de datos MySQL para organizar un sistema de alquiler de dispositivos, donde cada uno de estos puede ser rentado( en caso de estar disponible) estableciendo una fecha de inicio, fin (límite de dovolución) y de retorno. Solo se pueden rentar los dispositivos que no están ya registrados en un alquiler que no ha sido devuelto. Se aplicará una multa de 5 dólares por día en caso de atrasos en la devolución.
+NO INCLUYE INGRESO O MODIFICACIÓN DE DATOS, SOLO VISUALIZACIÓN MEDIANTE FILTROS.
 
 ### Modelo entidad relación:
 <img src="https://user-images.githubusercontent.com/73175815/152663974-ca8311fa-2fc0-4305-b522-63255e0269f4.png" width="300">
